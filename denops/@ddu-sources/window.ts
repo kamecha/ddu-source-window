@@ -10,6 +10,7 @@ import {
 
 type Params = {
   format: string;
+  ignoreBufNames?: string[];
 };
 
 type TabInfo = {
@@ -49,15 +50,17 @@ export class Source extends BaseSource<Params> {
         const tabinfo = ensureArray<TabInfo>(await fn.gettabinfo(args.denops));
         const items: Item<ActionData>[] = [];
         for (const tab of tabinfo) {
-          const tabName = await getTabName(args.denops, tab.tabnr);
           for (const winnr of tab.windows) {
             const bufNum = ensureNumber(await fn.winbufnr(args.denops, winnr));
             const bufName = ensureString(await fn.bufname(args.denops, bufNum));
+            if (args.sourceParams.ignoreBufNames?.includes(bufName)) {
+              continue;
+            }
             const regexp = new RegExp("(\s|\t|\n|\v)", "g");
             const text: string = args.sourceParams.format
               .replaceAll(regexp, " ")
               .replaceAll("%tn", tab.tabnr.toString())
-              .replaceAll("%T", tabName)
+              .replaceAll("%T", await getTabName(args.denops, tab.tabnr))
               .replaceAll("%wn", winnr.toString())
               .replaceAll("%w", bufName);
             items.push({
@@ -77,7 +80,8 @@ export class Source extends BaseSource<Params> {
 
   params(): Params {
     return {
-      format: "tab:%tn:%w:%wn",
+      format: "tab:%tn:%w",
+      ignoreBufNames: ["ddu-ff-filter-default", "ddu-ff-default"]
     };
   }
 }
