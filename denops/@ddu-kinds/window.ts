@@ -77,8 +77,8 @@ export class Kind extends BaseKind<Params> {
       focusBorder: string[]
     ) => {
       if (winlayout[0] === "leaf") {
-        const bufName = ensureNumber(await fn.winbufnr(denops, winlayout[1]));
-        const title = ensureString( await fn.bufname(denops, bufName) );
+        const bufnr = ensureNumber(await fn.winbufnr(denops, winlayout[1]));
+        const title = ensureString( await fn.bufname(denops, bufnr) );
         this.leafLayout(
           j,
           i,
