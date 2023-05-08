@@ -8,6 +8,7 @@ CONTENTS				*ddu-source-window-contents*
 Introduction		|ddu-source-window-introduction|
 Install			|ddu-source-window-install|
 Examples		|ddu-source-window-examples|
+Actions			|ddu-kind-window-actions|
 Params			|ddu-source-window-params|
 
 
@@ -33,11 +34,26 @@ https://github.com/nanozuki/tabby.nvim
 EXAMPLES				*ddu-source-window-examples*
 
 >
-	call ddu#start(#{ sources: [#{
+	call ddu#start(#{
+		\   sources: [#{
 		\	name: 'window',
-		\	params: #{format: 'tab\|%n:%w:%wn'}}] 
+		\	params: #{format: 'tab\|%n:%w:%wn'}}
+		\   ],
+		\   kindOptions: #{
+		\	window: #{
+		\	    defaultAction: 'open'
+		\	}
+		\   }
 		\})
 <
+
+==============================================================================
+ACTIONS						*ddu-kind-window-actions*
+
+						*ddu-kind-window-action-open*
+open
+		Go to the selected window.
+		This action behaves the same as using |win_gotoid()|.
 
 ==============================================================================
 PREVIEW PARAMS					*ddu-kind-window-preview-params*
