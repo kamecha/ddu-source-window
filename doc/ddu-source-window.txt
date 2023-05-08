@@ -80,6 +80,11 @@ format 		(string)
 
 		Default: "tab:%tn:%w"
 
+				*ddu-source-window-param-ignoreBufNames*
+ignoreBufNames 	(list)
+
+		Default: ["ddu-ff-filter-default", "ddu-ff-default"]
+
 ==============================================================================
 FREQUENTLY ASKED QUESTIONS (FAQ)			*ddu-source-window-faq*
 
