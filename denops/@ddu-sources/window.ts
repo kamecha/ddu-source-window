@@ -56,8 +56,9 @@ export class Source extends BaseSource<Params> {
             const regexp = new RegExp("(\s|\t|\n|\v)", "g");
             const text: string = args.sourceParams.format
               .replaceAll(regexp, " ")
-              .replaceAll("%n", tab.tabnr.toString())
+              .replaceAll("%tn", tab.tabnr.toString())
               .replaceAll("%T", tabName)
+              .replaceAll("%wn", winnr.toString())
               .replaceAll("%w", bufName);
             items.push({
               word: text,
@@ -76,7 +77,7 @@ export class Source extends BaseSource<Params> {
 
   params(): Params {
     return {
-      format: "tab:%n:%w",
+      format: "tab:%tn:%w:%wn",
     };
   }
 }
