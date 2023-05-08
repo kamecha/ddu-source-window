@@ -32,6 +32,10 @@ print(tab.get_name(1))
 EOF
 */
 async function getTabName(denops: Denops, tabnr: number): Promise<string> {
+  // tabbyが認識できるかどうかチェック
+  if (!(await denops.call("util#_luacheck", "tabby"))) {
+    return "";
+  }
   const tabName = await denops.eval(
     `luaeval('require("tabby.tab").get_name(${tabnr})')`,
   );
