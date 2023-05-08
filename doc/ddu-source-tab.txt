@@ -1,0 +1,110 @@
+*ddu-source-window.txt*	window source for ddu.vim
+
+Author: kamecha
+License: MIT license
+
+CONTENTS				*ddu-source-window-contents*
+
+Introduction		|ddu-source-window-introduction|
+Install			|ddu-source-window-install|
+Examples		|ddu-source-window-examples|
+Params			|ddu-source-window-params|
+
+
+==============================================================================
+INTRODUCTION				*ddu-source-window-introduction*
+
+This source collects window pages.
+
+
+==============================================================================
+INSTALL					*ddu-source-window-install*
+
+Please install both "ddu.vim" and "denops.vim".
+
+https://github.com/Shougo/ddu.vim
+https://github.com/vim-denops/denops.vim
+
+Optional: If you want to use the tab name format specifier "%T", please install "tabby.vim".
+
+https://github.com/nanozuki/tabby.nvim
+
+==============================================================================
+EXAMPLES				*ddu-source-window-examples*
+
+>
+	call ddu#start(#{ sources: [#{
+		\	name: 'window',
+		\	params: #{format: 'tab\|%n:%w:%wn'}}] 
+		\})
+<
+
+==============================================================================
+PREVIEW PARAMS					*ddu-kind-window-preview-params*
+
+				*ddu-kind-window-preview-param-border*
+border	(string[])
+		Style of window layout border.
+		The array will specifify the eight chars
+		building up the border in a clockwise fashion
+		starting with the top-left corner.
+		As an example, the rounded box style could be specified as
+		[ "╭", "─", "╮", "─", "╯", "─", "╰", "─" ].
+		If the number of chars are less than eight, they will be
+		repeated.Thus an ASCII border could be specified as 
+		[ "/", "-", "\\", "|" ], or all chars the same as [ "x" ].
+
+		Default:
+		["┌", "─", "┐", "│", "┘", "─", "└", "│"]
+
+				*ddu-kind-window-preview-param-focusBorder*
+focusBorder	(string[])
+		Style of focus window layout border.
+		Overview is same as |ddu-kind-window-preview-param-border|.
+
+		Default:
+		["╔", "═", "╗", "║", "╝", "═", "╚", "║"]
+
+==============================================================================
+PARAMS					*ddu-source-window-params*
+
+				*ddu-source-window-param-format*
+format 		(string)
+		text format.
+		The following format specifiers are supported:
+		
+		"%tn":tab number
+		"%T":tabby tab name (requires tabby.vim)
+		"%wn":windows number
+		"%w":windows related buffer name in each window
+
+		Default: "tab:%tn:%w"
+
+==============================================================================
+FREQUENTLY ASKED QUESTIONS (FAQ)			*ddu-source-window-faq*
+
+Q: How to setting the window layout border ?
+
+A: preview param is passed via action. see |ddu-ui-ff-action-preview|.
+   So the one of the settings will be bellow.
+
+>
+    call ddu#start({
+	   \ 'ui': 'ff',
+	   \ 'uiParams': {
+	   \     'ff': {
+	   \         'autoAction': { 
+	   \             'name': 'preview',
+	   \             'params': { 
+	   \                 'border': ['.'],
+	   \                 'focusBorder': ['+', '-', '+', '\|']
+	   \             }
+	   \         }
+	   \     },
+	   \ },
+	   \ 'sources': [{'name': 'window'}]
+	   \ })
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:
