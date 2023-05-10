@@ -53,7 +53,7 @@ export class Kind extends BaseKind<Params> {
     const contents: string[] = [];
     // previewContextのheight,widthに沿ってcontentsを初期化
     for (let i = 0; i < args.previewContext.height; i++) {
-      contents.push(" ".repeat(args.previewContext.width));
+      contents.push("x".repeat(args.previewContext.width));
     }
     const winLayout = await fn.winlayout(args.denops, action.tabnr) as WindowLayout;
     return {
@@ -66,6 +66,8 @@ export class Kind extends BaseKind<Params> {
       return [];
     }
     const winLayoutPreview: string[] = contents;
+    console.log("winLayoutPreview Height", winLayoutPreview.length);
+    console.log("winLayoutPreview Width", winLayoutPreview[0].length);
     const winLayoutPreviewRec = async (
       winlayout: WindowLayout,
       winnr: number,
@@ -76,7 +78,10 @@ export class Kind extends BaseKind<Params> {
       border: string[],
       focusBorder: string[]
     ) => {
+      console.log(winlayout);
+      console.log("i", i, "j", j, "width", width, "height", height);
       if (winlayout[0] === "leaf") {
+        console.log("leaf");
         const bufnr = ensureNumber(await fn.winbufnr(denops, winlayout[1]));
         const title = ensureString( await fn.bufname(denops, bufnr) );
         this.leafLayout(
@@ -88,52 +93,76 @@ export class Kind extends BaseKind<Params> {
           winLayoutPreview,
           ( winlayout[1] === winnr ? focusBorder : border )
         );
+        return;
       }
       if (winlayout[0] === "col") {
+        console.log("col");
         const next_height = Math.floor( height / winlayout[1].length );
         for (let k = 0; k < winlayout[1].length; k++) {
           const next_i = i + next_height * k;
           await winLayoutPreviewRec(winlayout[1][k], winnr, next_i, j, width, next_height, border, focusBorder);
         }
+        return;
       }
       if (winlayout[0] === "row") {
+        console.log("row");
         const next_width = Math.floor( width / winlayout[1].length );
         for (let k = 0; k < winlayout[1].length; k++) {
           const next_j = j + next_width * k;
           await winLayoutPreviewRec(winlayout[1][k], winnr, i, next_j, next_width, height, border, focusBorder);
         }
+        return;
       }
+      console.log("ここは実行されないはず");
     }
     await winLayoutPreviewRec(winLayout, winnr, 0, 0, contents[0].length, contents.length, border, focusBorder);
     return winLayoutPreview;
   }
+  // x, y, width, heightの関係
+  // 全体がcontents配列
+  // *がtitle
+  //                              width
+  //                    ┌───┬───┬───┬───┬───┬───┐
+  //                      x                          
+  //        ┌   ┌───┬───┬───┬───┬───┬───┬───┬───┐
+  //        │ y │   │   │ + │ - │ - │ - │ - │ + │
+  //        ├   ├───┼───┼───┼───┼───┼───┼───┼───┤
+  //        │   │   │   │ | │   │   │   │   │ | │
+  //        ├   ├───┼───┼───┼───┼───┼───┼───┼───┤
+  // height │   │   │   │ | │   │ * │ * │   │ | │
+  //        ├   ├───┼───┼───┼───┼───┼───┼───┼───┤
+  //        │   │   │   │ | │   │   │   │   │ | │
+  //        ├   ├───┼───┼───┼───┼───┼───┼───┼───┤
+  //        │   │   │   │ + │ - │ - │ - │ - │ + │
+  //        └   └───┴───┴───┴───┴───┴───┴───┴───┘
   leafLayout(x: number, y: number, width: number, height: number, title: string, contents: string[], border: string[]) {
     // validation
-    if (y < 0 || y >= contents.length || x < 0 || x >= contents[0].length) {
+    if (y < 0 || y >= contents.length || x < 0 || x >= contents[0].length || width < 0 || height < 0) {
+      console.log("each of value is out of range");
       return;
     }
-    if (width < 2 ||  height < 2) {
+    if (y + height > contents.length || x + width > contents[0].length) {
+      console.log("out of range");
       return;
     }
-    // borderの配列を8つの要素に変換(borderの要素が8より小さいと順に繰り返す)
-    // double style
-    // [ "╔", "═", "╗", "║", "╝", "═", "╚", "║" ] => [ "╔", "═", "╗", "║", "╝", "═", "╚", "║" ]
-    // [ "+", "-", "+", "|" ] => [ "+", "-", "+", "|", "+", "-", "+", "|" ]
     const border8:string[] = [];
     for (let i = 0; i < 8; i++) {
       border8.push(border[i % border.length]);
     }
+    console.log("draw");
+    console.log("x", x, "y", y, "width", width, "height", height);
     // draw
-    const limitHeight = Math.min(y + height, contents.length - 1);
-    // const limitWidth = Math.min(x + width, contents[0].length - 1);
-    for (let i = y; i < limitHeight; i++) {
+    for (let i = y; i < y + height; i++) {
+      console.log("i", i);
       if ( i === y ) {
+        console.log("i === y", i, y);
         contents[i] = contents[i].slice(0, x) + border8[0] + border8[1].repeat(width - 2) + border8[2] + contents[i].slice( x + width );
-      } else if ( i === limitHeight - 1 ) {
+      } else if ( i === y + height - 1 ) {
+        console.log("i === height - 1", i, height - 1);
         contents[i] = contents[i].slice(0, x) + border8[6] + border8[5].repeat(width - 2) + border8[4] + contents[i].slice( x + width );
       } else {
         // 中央にtitleを表示
-        if ( i === Math.floor( (y + limitHeight) / 2 ) ) {
+        if ( i === y + Math.floor( height / 2 ) ) {
           // titleがwidthを越える場合は後ろだけを表示
           if ( title.length > width - 2 ) {
             contents[i] = contents[i].slice(0, x) + border8[7] + title.slice(-(width - 2)) + border8[3] + contents[i].slice( x + width );
@@ -147,5 +176,6 @@ export class Kind extends BaseKind<Params> {
         contents[i] = contents[i].slice(0, x) + border8[7] + " ".repeat(width - 2) + border8[3] + contents[i].slice( x + width );
       }
     }
+    console.log(contents);
   }
 }
