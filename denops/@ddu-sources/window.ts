@@ -33,7 +33,7 @@ EOF
 */
 async function getTabName(denops: Denops, tabnr: number): Promise<string> {
   // tabbyが認識できるかどうかチェック
-  if (!(await denops.call("util#_luacheck", "tabby"))) {
+  if (!(await denops.call("ddu#source#window#lua_check", "tabby"))) {
     return "";
   }
   const tabName = await denops.eval(
