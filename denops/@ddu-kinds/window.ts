@@ -66,8 +66,8 @@ export class Kind extends BaseKind<Params> {
       return [];
     }
     const winLayoutPreview: string[] = contents;
-    console.log("winLayoutPreview Height", winLayoutPreview.length);
-    console.log("winLayoutPreview Width", winLayoutPreview[0].length);
+
+
     const winLayoutPreviewRec = async (
       winlayout: WindowLayout,
       winnr: number,
@@ -78,10 +78,10 @@ export class Kind extends BaseKind<Params> {
       border: string[],
       focusBorder: string[]
     ) => {
-      console.log(winlayout);
-      console.log("i", i, "j", j, "width", width, "height", height);
+
+
       if (winlayout[0] === "leaf") {
-        console.log("leaf");
+
         const bufnr = ensureNumber(await fn.winbufnr(denops, winlayout[1]));
         const title = ensureString( await fn.bufname(denops, bufnr) );
         this.leafLayout(
@@ -96,7 +96,7 @@ export class Kind extends BaseKind<Params> {
         return;
       }
       if (winlayout[0] === "col") {
-        console.log("col");
+
         const next_height = Math.floor( height / winlayout[1].length );
         for (let k = 0; k < winlayout[1].length; k++) {
           const next_i = i + next_height * k;
@@ -105,7 +105,7 @@ export class Kind extends BaseKind<Params> {
         return;
       }
       if (winlayout[0] === "row") {
-        console.log("row");
+
         const next_width = Math.floor( width / winlayout[1].length );
         for (let k = 0; k < winlayout[1].length; k++) {
           const next_j = j + next_width * k;
@@ -113,7 +113,7 @@ export class Kind extends BaseKind<Params> {
         }
         return;
       }
-      console.log("ここは実行されないはず");
+
     }
     await winLayoutPreviewRec(winLayout, winnr, 0, 0, contents[0].length, contents.length, border, focusBorder);
     return winLayoutPreview;
@@ -138,27 +138,27 @@ export class Kind extends BaseKind<Params> {
   leafLayout(x: number, y: number, width: number, height: number, title: string, contents: string[], border: string[]) {
     // validation
     if (y < 0 || y >= contents.length || x < 0 || x >= contents[0].length || width < 0 || height < 0) {
-      console.log("each of value is out of range");
+
       return;
     }
     if (y + height > contents.length || x + width > contents[0].length) {
-      console.log("out of range");
+
       return;
     }
     const border8:string[] = [];
     for (let i = 0; i < 8; i++) {
       border8.push(border[i % border.length]);
     }
-    console.log("draw");
-    console.log("x", x, "y", y, "width", width, "height", height);
+
+
     // draw
     for (let i = y; i < y + height; i++) {
-      console.log("i", i);
+
       if ( i === y ) {
-        console.log("i === y", i, y);
+
         contents[i] = contents[i].slice(0, x) + border8[0] + border8[1].repeat(width - 2) + border8[2] + contents[i].slice( x + width );
       } else if ( i === y + height - 1 ) {
-        console.log("i === height - 1", i, height - 1);
+
         contents[i] = contents[i].slice(0, x) + border8[6] + border8[5].repeat(width - 2) + border8[4] + contents[i].slice( x + width );
       } else {
         // 中央にtitleを表示
@@ -176,6 +176,6 @@ export class Kind extends BaseKind<Params> {
         contents[i] = contents[i].slice(0, x) + border8[7] + " ".repeat(width - 2) + border8[3] + contents[i].slice( x + width );
       }
     }
-    console.log(contents);
+
   }
 }
