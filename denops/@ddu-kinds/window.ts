@@ -63,7 +63,7 @@ export class Kind extends BaseKind<Params> {
     const contents: string[] = [];
     // previewContextのheight,widthに沿ってcontentsを初期化
     for (let i = 0; i < args.previewContext.height; i++) {
-      contents.push("x".repeat(args.previewContext.width));
+      contents.push(" ".repeat(args.previewContext.width));
     }
     const winLayout = await fn.winlayout(
       args.denops,
