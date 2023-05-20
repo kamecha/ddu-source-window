@@ -36,16 +36,13 @@ async function getTabName(denops: Denops, tabnr: number): Promise<string> {
   if (!(await denops.call("ddu#source#window#lua_check", "tabby"))) {
     return "";
   }
-  let tabName: unknown;
   try {
-    tabName = await denops.eval(
-      `luaeval('require("tabby.tab").get_name(${tabnr})')`,
-    );
+    const tabName = await denops.call("ddu#source#window#get_tab_name", tabnr);
+    return ensureString(tabName);
   } catch (e) {
     console.error(e);
     return "";
   }
-  return ensureString(tabName);
 }
 
 export class Source extends BaseSource<Params> {
