@@ -36,9 +36,15 @@ async function getTabName(denops: Denops, tabnr: number): Promise<string> {
   if (!(await denops.call("ddu#source#window#lua_check", "tabby"))) {
     return "";
   }
-  const tabName = await denops.eval(
-    `luaeval('require("tabby.tab").get_name(${tabnr})')`,
-  );
+  let tabName: unknown;
+  try {
+    tabName = await denops.eval(
+      `luaeval('require("tabby.tab").get_name(${tabnr})')`,
+    );
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
   return ensureString(tabName);
 }
 
@@ -71,7 +77,7 @@ export class Source extends BaseSource<Params> {
               word: text,
               action: {
                 tabnr: tab.tabnr,
-                winnr: winnr
+                winnr: winnr,
               },
             });
           }
@@ -85,7 +91,7 @@ export class Source extends BaseSource<Params> {
   params(): Params {
     return {
       format: "tab:%tn:%w",
-      ignoreBufNames: ["ddu-ff-filter-default", "ddu-ff-default"]
+      ignoreBufNames: ["ddu-ff-filter-default", "ddu-ff-default"],
     };
   }
 }
