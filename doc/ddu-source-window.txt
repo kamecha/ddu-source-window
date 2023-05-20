@@ -92,9 +92,10 @@ format 		(string)
 		"%tn":tab number
 		"%T":tabby tab name (requires tabby.vim)
 		"%wn":windows number
+		"%wi":windowid (|winid|)
 		"%w":windows related buffer name in each window
 
-		Default: "tab:%tn:%w"
+		Default: "tab:%tn:%w:%wi"
 
 				*ddu-source-window-param-ignoreBufNames*
 ignoreBufNames 	(list)

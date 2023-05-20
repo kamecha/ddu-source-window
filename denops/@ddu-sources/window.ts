@@ -58,6 +58,7 @@ export class Source extends BaseSource<Params> {
         const items: Item<ActionData>[] = [];
         for (const tab of tabinfo) {
           for (const winnr of tab.windows) {
+            const winId = ensureNumber(await fn.win_getid(args.denops, winnr, tab.tabnr));
             const bufNum = ensureNumber(await fn.winbufnr(args.denops, winnr));
             const bufName = ensureString(await fn.bufname(args.denops, bufNum));
             if (args.sourceParams.ignoreBufNames?.includes(bufName)) {
@@ -69,12 +70,14 @@ export class Source extends BaseSource<Params> {
               .replaceAll("%tn", tab.tabnr.toString())
               .replaceAll("%T", await getTabName(args.denops, tab.tabnr))
               .replaceAll("%wn", winnr.toString())
+              .replaceAll("%wi", winId.toString())
               .replaceAll("%w", bufName);
             items.push({
               word: text,
               action: {
                 tabnr: tab.tabnr,
                 winnr: winnr,
+                winid: winId,
               },
             });
           }
@@ -87,7 +90,7 @@ export class Source extends BaseSource<Params> {
 
   params(): Params {
     return {
-      format: "tab:%tn:%w",
+      format: "tab:%tn:%w:%wi",
       ignoreBufNames: ["ddu-ff-filter-default", "ddu-ff-default"],
     };
   }
