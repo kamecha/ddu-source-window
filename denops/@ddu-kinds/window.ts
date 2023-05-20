@@ -18,6 +18,7 @@ import {
 export interface ActionData {
   tabnr: number;
   winnr: number;
+  winid: number;
 }
 
 type Params = Record<never, never>;
@@ -37,7 +38,7 @@ export class Kind extends BaseKind<Params> {
       for (const item of args.items) {
         if (item.action) {
           const action = item.action as ActionData;
-          await fn.win_gotoid(args.denops, action.winnr);
+          await fn.win_gotoid(args.denops, action.winid);
         }
       }
       return ActionFlags.None;
