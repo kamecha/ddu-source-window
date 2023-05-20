@@ -17,7 +17,6 @@ import {
 
 export interface ActionData {
   tabnr: number;
-  winnr: number;
   winid: number;
 }
 
@@ -76,7 +75,7 @@ export class Kind extends BaseKind<Params> {
         args.denops,
         contents,
         winLayout,
-        action.winnr,
+        action.winid,
         border,
         focusBorder,
       ),
@@ -86,7 +85,7 @@ export class Kind extends BaseKind<Params> {
     denops: Denops,
     contents: string[],
     winLayout: WindowLayout,
-    winnr: number,
+    winid: number,
     border: string[],
     focusBorder: string[],
   ): Promise<string[]> {
@@ -97,7 +96,7 @@ export class Kind extends BaseKind<Params> {
 
     const winLayoutPreviewRec = async (
       winlayout: WindowLayout,
-      winnr: number,
+      winid: number,
       i: number,
       j: number,
       width: number,
@@ -115,7 +114,7 @@ export class Kind extends BaseKind<Params> {
           height,
           title,
           winLayoutPreview,
-          winlayout[1] === winnr ? focusBorder : border,
+          winlayout[1] === winid ? focusBorder : border,
         );
         return;
       }
@@ -125,7 +124,7 @@ export class Kind extends BaseKind<Params> {
           const next_i = i + next_height * k;
           await winLayoutPreviewRec(
             winlayout[1][k],
-            winnr,
+            winid,
             next_i,
             j,
             width,
@@ -142,7 +141,7 @@ export class Kind extends BaseKind<Params> {
           const next_j = j + next_width * k;
           await winLayoutPreviewRec(
             winlayout[1][k],
-            winnr,
+            winid,
             i,
             next_j,
             next_width,
@@ -156,7 +155,7 @@ export class Kind extends BaseKind<Params> {
     };
     await winLayoutPreviewRec(
       winLayout,
-      winnr,
+      winid,
       0,
       0,
       contents[0].length,

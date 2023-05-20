@@ -37,7 +37,7 @@ EXAMPLES				*ddu-source-window-examples*
 	call ddu#start(#{
 		\   sources: [#{
 		\	name: 'window',
-		\	params: #{format: 'tab\|%n:%w:%wn'}}
+		\	params: #{format: 'tab\|%tn:%w:%wi'}}
 		\   ],
 		\   kindOptions: #{
 		\	window: #{
@@ -91,11 +91,10 @@ format 		(string)
 		
 		"%tn":tab number
 		"%T":tabby tab name (requires tabby.vim)
-		"%wn":windows number
 		"%wi":windowid (|winid|)
 		"%w":windows related buffer name in each window
 
-		Default: "tab:%tn:%w:%wi"
+		Default: "%tn:%w:%wi"
 
 				*ddu-source-window-param-ignoreBufNames*
 ignoreBufNames 	(list)
