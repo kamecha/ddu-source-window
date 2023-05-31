@@ -2,6 +2,7 @@ import { BaseKind } from "https://deno.land/x/ddu_vim@v2.5.0/base/kind.ts";
 import {
   ActionFlags,
   Actions,
+  Context,
   DduItem,
   PreviewContext,
   Previewer,
@@ -19,6 +20,11 @@ export interface ActionData {
   tabnr: number;
   winid: number;
 }
+
+type WinInfo = {
+  bufnr: number;
+  winid: number;
+};
 
 type Params = Record<never, never>;
 
@@ -39,6 +45,38 @@ export class Kind extends BaseKind<Params> {
           const action = item.action as ActionData;
           await fn.win_gotoid(args.denops, action.winid);
         }
+      }
+      return ActionFlags.None;
+    },
+    swap: async (args: {
+      denops: Denops;
+      kindParams: Params;
+      items: DduItem[];
+      context: Context;
+    }) => {
+      let wins = new Array<WinInfo>();
+      for (const item of args.items) {
+        if (item.action) {
+          const action = item.action as ActionData;
+          wins = wins.concat(
+            await fn.getwininfo(args.denops, action.winid) as Array<WinInfo>,
+          );
+        }
+      }
+
+      switch (wins.length) {
+        case 1:
+          wins.push({ bufnr: args.context.bufNr, winid: args.context.winId });
+        /* falls through */
+        case 2:
+          await fn.win_gotoid(args.denops, wins[1].winid);
+          await fn.execute(args.denops, "edit #" + wins[0].bufnr);
+          await fn.win_gotoid(args.denops, wins[0].winid);
+          await fn.execute(args.denops, "edit #" + wins[1].bufnr);
+          break;
+        default:
+          console.error("select 1 or 2 windows.");
+          break;
       }
       return ActionFlags.None;
     },
