@@ -55,6 +55,18 @@ open
 		Go to the selected window.
 		This action behaves the same as using |win_gotoid()|.
 
+						*ddu-kind-window-action-swap*
+swap
+		Swap selected windows.
+		Note:
+		    + When select only 1 window,
+			swap context.bufNr and selected window.
+		    + When select two windows
+			using |ddu-ui-ff-action-toggleSelectItem|,
+			swap selected two windows.
+		    + When select more three windows,
+			don't executed.
+
 ==============================================================================
 PREVIEW PARAMS					*ddu-kind-window-preview-params*
 
