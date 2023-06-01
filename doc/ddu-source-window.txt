@@ -57,7 +57,7 @@ open
 
 						*ddu-kind-window-action-swap*
 swap
-		Swap selected windows.
+		Swap the buffers corresponding to the selected window.
 		Note:
 		    + When select only 1 window,
 			swap context.bufNr and selected window.
