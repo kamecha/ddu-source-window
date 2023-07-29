@@ -58,9 +58,6 @@ open
 						*ddu-kind-window-action-close*
 close
 		close selected window.
-		Note:
-		    This action is only supported nvim.
-		    for using |nvim_win_close()|
 
 						*ddu-kind-window-action-swap*
 swap
