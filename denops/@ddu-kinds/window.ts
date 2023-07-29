@@ -55,11 +55,7 @@ export class Kind extends BaseKind<Params> {
       for (const item of args.items) {
         if (item.action) {
           const action = item.action as ActionData;
-          if (args.denops.meta.host === "nvim") {
-            await args.denops.call("nvim_win_close", action.winid, true);
-          } else {
-            echo(args.denops, "close action is not supported in vim.");
-          }
+          await fn.win_execute(args.denops, action.winid, "close");
         }
       }
       return ActionFlags.None;
