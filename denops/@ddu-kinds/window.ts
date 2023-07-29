@@ -9,7 +9,7 @@ import {
 } from "https://deno.land/x/ddu_vim@v2.5.0/types.ts";
 import { Denops } from "https://deno.land/x/denops_std@v3.9.0/mod.ts";
 import { WindowLayout } from "../@ddu-sources/window.ts";
-import { fn } from "https://deno.land/x/ddu_vim@v1.13.0/deps.ts";
+import { echo, fn } from "https://deno.land/x/ddu_vim@v1.13.0/deps.ts";
 import {
   ensureNumber,
   ensureObject,
@@ -44,6 +44,22 @@ export class Kind extends BaseKind<Params> {
         if (item.action) {
           const action = item.action as ActionData;
           await fn.win_gotoid(args.denops, action.winid);
+        }
+      }
+      return ActionFlags.None;
+    },
+    close: async (args: {
+      denops: Denops;
+      items: DduItem[];
+    }) => {
+      for (const item of args.items) {
+        if (item.action) {
+          const action = item.action as ActionData;
+          if (args.denops.meta.host === "nvim") {
+            await args.denops.call("nvim_win_close", action.winid, true);
+          } else {
+            echo(args.denops, "close action is not supported in vim.");
+          }
         }
       }
       return ActionFlags.None;
