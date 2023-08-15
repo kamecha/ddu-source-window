@@ -37,7 +37,13 @@ async function getTabName(denops: Denops, tabnr: number): Promise<string> {
     return "";
   }
   try {
-    const tabName = await denops.call("ddu#source#window#get_tab_name", tabnr);
+    const tabPages = ensureArray<number>(
+      await denops.call("ddu#source#window#get_tabpages"),
+    );
+    const tabName = await denops.call(
+      "ddu#source#window#get_tab_name",
+      tabPages[tabnr - 1],
+    );
     return ensureString(tabName);
   } catch (e) {
     console.error(e);
