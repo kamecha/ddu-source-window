@@ -11,3 +11,7 @@ function! ddu#source#window#get_tab_name(tabid) abort
         \ 'require("ddu-source-window").get_tab_name(_A.tabid)',
         \ #{ tabid: a:tabid })
 endfunction
+
+function ddu#source#window#get_tabpages() abort
+  return luaeval('require("ddu-source-window").get_tabpages()')
+endfunction
