@@ -1,12 +1,12 @@
-import { BaseSource, Item } from "https://deno.land/x/ddu_vim@v2.5.0/types.ts";
-import { ActionData } from "../@ddu-kinds/window.ts";
-import { Denops } from "https://deno.land/x/ddu_vim@v2.5.0/deps.ts";
-import * as fn from "https://deno.land/x/denops_std@v4.0.0/function/mod.ts";
 import {
+  BaseSource,
   ensureArray,
   ensureNumber,
   ensureString,
-} from "https://deno.land/x/unknownutil@v2.0.0/mod.ts";
+  fn,
+} from "../deps.ts";
+import type { Denops, Item } from "../deps.ts";
+import { ActionData } from "../@ddu-kinds/window.ts";
 
 type Params = {
   format: string;

@@ -1,20 +1,20 @@
-import { BaseKind } from "https://deno.land/x/ddu_vim@v2.5.0/base/kind.ts";
+import { WindowLayout } from "../@ddu-sources/window.ts";
 import {
   ActionFlags,
-  Actions,
-  Context,
-  DduItem,
-  PreviewContext,
-  Previewer,
-} from "https://deno.land/x/ddu_vim@v2.5.0/types.ts";
-import { Denops } from "https://deno.land/x/denops_std@v3.9.0/mod.ts";
-import { WindowLayout } from "../@ddu-sources/window.ts";
-import { echo, fn } from "https://deno.land/x/ddu_vim@v1.13.0/deps.ts";
-import {
+  BaseKind,
   ensureNumber,
   ensureObject,
   ensureString,
-} from "https://deno.land/x/unknownutil@v2.1.0/mod.ts";
+  fn,
+} from "../deps.ts";
+import type {
+  Actions,
+  Context,
+  DduItem,
+  Denops,
+  PreviewContext,
+  Previewer,
+} from "../deps.ts";
 
 export interface ActionData {
   tabnr: number;
