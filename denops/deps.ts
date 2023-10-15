@@ -1,5 +1,5 @@
-export type { Denops } from "https://deno.land/x/denops_std@v3.9.0/mod.ts";
-export * as fn from "https://deno.land/x/denops_std@v4.0.0/function/mod.ts";
+export { fn } from "https://deno.land/x/ddu_vim@v2.5.0/deps.ts";
+export type { Denops } from "https://deno.land/x/ddu_vim@v2.5.0/deps.ts";
 export {
   ActionFlags,
   BaseKind,
