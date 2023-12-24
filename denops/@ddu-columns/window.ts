@@ -5,7 +5,9 @@ import {
   GetTextResult,
 } from "../deps.ts";
 
-export type Params = Record<never, never>;
+export type Params = {
+  format: string;
+};
 
 export class Column extends BaseColumn<Params> {
   getLength({}: GetLengthArguments<Params>): Promise<number> {
@@ -15,6 +17,8 @@ export class Column extends BaseColumn<Params> {
     throw new Error("Method not implemented.");
   }
   params(): Params {
-    throw new Error("Method not implemented.");
+    return {
+      format: "",
+    };
   }
 }
