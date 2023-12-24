@@ -2,6 +2,7 @@ export { fn } from "https://deno.land/x/ddu_vim@v2.5.0/deps.ts";
 export type { Denops } from "https://deno.land/x/ddu_vim@v2.5.0/deps.ts";
 export {
   ActionFlags,
+  BaseColumn,
   BaseKind,
   BaseSource,
 } from "https://deno.land/x/ddu_vim@v2.5.0/types.ts";
@@ -13,6 +14,11 @@ export type {
   PreviewContext,
   Previewer,
 } from "https://deno.land/x/ddu_vim@v2.5.0/types.ts";
+export type {
+  GetLengthArguments,
+  GetTextArguments,
+  GetTextResult,
+} from "https://deno.land/x/ddu_vim@v2.5.0/base/column.ts";
 export {
   ensureArray,
   ensureNumber,
