@@ -69,7 +69,24 @@ export class Source extends BaseSource<Params> {
           for (const winid of tab.windows) {
             const bufNum = ensureNumber(await fn.winbufnr(args.denops, winid));
             const bufName = ensureString(await fn.bufname(args.denops, bufNum));
-            if (args.sourceParams.ignoreBufNames?.includes(bufName)) {
+            const dduNames = ensureArray<string>(
+              await args.denops.call("ddu#custom#get_names"),
+            );
+            const dduWinId = await dduNames
+              .map(async (name) => {
+                const winId = ensureNumber(
+                  await args.denops.call("ddu#ui#winid", name),
+                );
+                return winId;
+              })
+              .find(async (winId) => {
+                const id = await winId;
+                return id !== -1;
+              });
+            if (
+              args.sourceParams.ignoreBufNames?.includes(bufName) ||
+              dduWinId === winid
+            ) {
               continue;
             }
             const regexp = new RegExp("(\s|\t|\n|\v)", "g");
