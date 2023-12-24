@@ -31,7 +31,7 @@ local tab = require('tabby.tab')
 print(tab.get_name(1))
 EOF
 */
-async function getTabName(denops: Denops, tabnr: number): Promise<string> {
+export async function getTabName(denops: Denops, tabnr: number): Promise<string> {
   // tabbyが認識できるかどうかチェック
   if (!(await denops.call("ddu#source#window#lua_check", "tabby"))) {
     return "";
