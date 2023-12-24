@@ -47,8 +47,6 @@ export class Column extends BaseColumn<Params> {
       .replaceAll("%T", await getTabName(args.denops, action.tabnr))
       .replaceAll("%wi", action.winid.toString())
       .replaceAll("%w", bufName);
-    console.log("format: " + args.columnParams.format);
-    console.log("text: " + text);
     const textLength = (new TextEncoder()).encode(text).length;
     const padding = " ".repeat(args.endCol - args.startCol - textLength);
     return {
