@@ -72,20 +72,16 @@ export class Source extends BaseSource<Params> {
             const dduNames = ensureArray<string>(
               await args.denops.call("ddu#custom#get_names"),
             );
-            const dduWinId = await dduNames
-              .map(async (name) => {
-                const winId = ensureNumber(
-                  await args.denops.call("ddu#ui#winid", name),
-                );
-                return winId;
-              })
-              .find(async (winId) => {
-                const id = await winId;
-                return id !== -1;
-              });
+            const dduWinIds: number[] = [];
+            for (const name of dduNames) {
+              const winIds = ensureArray<number>(
+                await args.denops.call("ddu#ui#winids", name),
+              );
+              dduWinIds.push(...winIds);
+            }
             if (
               args.sourceParams.ignoreBufNames?.includes(bufName) ||
-              dduWinId === winid
+              dduWinIds.includes(winid)
             ) {
               continue;
             }
