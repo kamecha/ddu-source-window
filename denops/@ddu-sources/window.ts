@@ -1,9 +1,4 @@
-import {
-  BaseSource,
-  ensureArray,
-  ensureString,
-  fn,
-} from "../deps.ts";
+import { BaseSource, ensureArray, ensureString, fn } from "../deps.ts";
 import type { DduOptions, Denops, Item } from "../deps.ts";
 import { ActionData } from "../@ddu-kinds/window.ts";
 
