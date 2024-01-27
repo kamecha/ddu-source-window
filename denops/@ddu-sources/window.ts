@@ -18,7 +18,7 @@ type TabInfo = {
   windows: number[];
 };
 
-type WindowInfo = {
+export type WindowInfo = {
   botline: number;
   bufnr: number;
   height: number;

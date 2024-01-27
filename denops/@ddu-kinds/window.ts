@@ -1,7 +1,8 @@
-import { WindowLayout } from "../@ddu-sources/window.ts";
+import { WindowInfo, WindowLayout } from "../@ddu-sources/window.ts";
 import {
   ActionFlags,
   BaseKind,
+  ensureArray,
   ensureNumber,
   ensureObject,
   ensureString,
@@ -20,11 +21,6 @@ export interface ActionData {
   tabnr: number;
   winid: number;
 }
-
-type WinInfo = {
-  bufnr: number;
-  winid: number;
-};
 
 type Params = Record<never, never>;
 
@@ -66,19 +62,27 @@ export class Kind extends BaseKind<Params> {
       items: DduItem[];
       context: Context;
     }) => {
-      let wins = new Array<WinInfo>();
+      let wins = new Array<WindowInfo>();
+      const currentWindowInfos = ensureArray<WindowInfo>(
+        await fn.getwininfo(args.denops, args.context.winId),
+      );
+      if (currentWindowInfos.length !== 1) {
+        return ActionFlags.None;
+      }
+      const currentWindowInfo = currentWindowInfos[0];
+
       for (const item of args.items) {
         if (item.action) {
           const action = item.action as ActionData;
           wins = wins.concat(
-            await fn.getwininfo(args.denops, action.winid) as Array<WinInfo>,
+            await fn.getwininfo(args.denops, action.winid) as Array<WindowInfo>,
           );
         }
       }
 
       switch (wins.length) {
         case 1:
-          wins.push({ bufnr: args.context.bufNr, winid: args.context.winId });
+          wins.push(currentWindowInfo);
         /* falls through */
         case 2:
           await fn.win_gotoid(args.denops, wins[1].winid);
