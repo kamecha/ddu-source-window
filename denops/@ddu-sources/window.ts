@@ -1,9 +1,4 @@
-import {
-  BaseSource,
-  ensureArray,
-  ensureString,
-  fn,
-} from "../deps.ts";
+import { BaseSource, ensureArray, ensureString, fn } from "../deps.ts";
 import type { Denops, Item } from "../deps.ts";
 import { ActionData } from "../@ddu-kinds/window.ts";
 
@@ -92,7 +87,9 @@ export class Source extends BaseSource<Params> {
               continue;
             }
             const wininfo = wininfos[0];
-            const bufName = ensureString(await fn.bufname(args.denops, wininfo.bufnr));
+            const bufName = ensureString(
+              await fn.bufname(args.denops, wininfo.bufnr),
+            );
             const dduNames = ensureArray<string>(
               await args.denops.call("ddu#custom#get_names"),
             );
