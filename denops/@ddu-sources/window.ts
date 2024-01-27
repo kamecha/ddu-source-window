@@ -1,7 +1,6 @@
 import {
   BaseSource,
   ensureArray,
-  ensureNumber,
   ensureString,
   fn,
 } from "../deps.ts";
@@ -17,6 +16,25 @@ type TabInfo = {
   tabnr: number;
   variables: Record<string, unknown>;
   windows: number[];
+};
+
+type WindowInfo = {
+  botline: number;
+  bufnr: number;
+  height: number;
+  loclist: number;
+  quickfix: number;
+  terminal: number;
+  tabnr: number;
+  topline: number;
+  variables: Record<string, unknown>;
+  width: number;
+  winbar: number;
+  wincol: number;
+  textoff: number;
+  winid: number;
+  winnr: number;
+  winrow: number;
 };
 
 export type LeafLayout = ["leaf", number];
@@ -67,8 +85,14 @@ export class Source extends BaseSource<Params> {
         const items: Item<ActionData>[] = [];
         for (const tab of tabinfo) {
           for (const winid of tab.windows) {
-            const bufNum = ensureNumber(await fn.winbufnr(args.denops, winid));
-            const bufName = ensureString(await fn.bufname(args.denops, bufNum));
+            const wininfos = ensureArray<WindowInfo>(
+              await fn.getwininfo(args.denops, winid),
+            );
+            if (wininfos.length === 0) {
+              continue;
+            }
+            const wininfo = wininfos[0];
+            const bufName = ensureString(await fn.bufname(args.denops, wininfo.bufnr));
             const dduNames = ensureArray<string>(
               await args.denops.call("ddu#custom#get_names"),
             );
