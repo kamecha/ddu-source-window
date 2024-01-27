@@ -96,7 +96,10 @@ export class Source extends BaseSource<Params> {
             const bufName = ensureString(
               await fn.bufname(args.denops, wininfo.bufnr),
             );
-            const currentDduOptions = (await args.denops.call("ddu#custom#get_current")) as Partial<DduOptions>;
+            const currentDduOptions =
+              (await args.denops.call("ddu#custom#get_current")) as Partial<
+                DduOptions
+              >;
             const dduWinIds: number[] = ensureArray<number>(
               await args.denops.call(
                 "ddu#ui#winids",
