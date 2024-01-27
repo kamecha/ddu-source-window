@@ -17,10 +17,7 @@ import type {
   Previewer,
 } from "../deps.ts";
 
-export type ActionData = {
-  tabnr: number;
-  winid: number;
-};
+export type ActionData = WindowInfo;
 
 type Params = Record<never, never>;
 

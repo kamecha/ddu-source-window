@@ -115,10 +115,7 @@ export class Source extends BaseSource<Params> {
               .replaceAll("%w", bufName);
             items.push({
               word: text,
-              action: {
-                tabnr: tab.tabnr,
-                winid: winid,
-              },
+              action: wininfo,
             });
           }
         }
