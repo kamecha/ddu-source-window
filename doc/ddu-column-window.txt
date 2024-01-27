@@ -42,7 +42,7 @@ EXAMPLES				*ddu-column-window-examples*
 		\			#{ name: 'window', params: #{ format: "%tn " } },
 		\			#{ name: 'window', params: #{ format: "%w" } }
 		\		],
-		\		matcher: ['converter_display_word', 'matcher_substring']
+		\		converters: ['converter_display_word', 'matcher_substring']
 		\	},
 		\   }],
 		\   kindOptions: #{
