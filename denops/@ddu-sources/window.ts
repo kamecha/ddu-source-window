@@ -128,6 +128,7 @@ export class Source extends BaseSource<Params> {
   params(): Params {
     return {
       format: "%tn:%w:%wi",
+      // deprecated
       ignoreBufNames: ["ddu-ff-filter-default", "ddu-ff-default"],
     };
   }

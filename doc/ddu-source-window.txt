@@ -114,6 +114,8 @@ format 		(string)
 
 				*ddu-source-window-param-ignoreBufNames*
 ignoreBufNames 	(list)
+		NOTE: It is deprecated. Please use appropriate ddu filter.
+		Now the ddu window is automatically removed.
 
 		Default: ["ddu-ff-filter-default", "ddu-ff-default"]
 
