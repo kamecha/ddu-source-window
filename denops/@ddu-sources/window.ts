@@ -1,7 +1,6 @@
 import {
   BaseSource,
   ensureArray,
-  ensureObject,
   ensureString,
   fn,
 } from "../deps.ts";
