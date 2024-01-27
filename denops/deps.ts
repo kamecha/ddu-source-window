@@ -6,6 +6,7 @@ export {
   BaseKind,
   BaseSource,
 } from "https://deno.land/x/ddu_vim@v2.5.0/types.ts";
+export type { DduOptions } from "https://deno.land/x/ddu_vim@v2.5.0/types.ts";
 export type {
   Actions,
   Context,

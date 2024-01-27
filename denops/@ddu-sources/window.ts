@@ -1,5 +1,11 @@
-import { BaseSource, ensureArray, ensureString, fn } from "../deps.ts";
-import type { Denops, Item } from "../deps.ts";
+import {
+  BaseSource,
+  ensureArray,
+  ensureObject,
+  ensureString,
+  fn,
+} from "../deps.ts";
+import type { DduOptions, Denops, Item } from "../deps.ts";
 import { ActionData } from "../@ddu-kinds/window.ts";
 
 type Params = {
@@ -90,16 +96,13 @@ export class Source extends BaseSource<Params> {
             const bufName = ensureString(
               await fn.bufname(args.denops, wininfo.bufnr),
             );
-            const dduNames = ensureArray<string>(
-              await args.denops.call("ddu#custom#get_names"),
+            const currentDduOptions = (await args.denops.call("ddu#custom#get_current")) as Partial<DduOptions>;
+            const dduWinIds: number[] = ensureArray<number>(
+              await args.denops.call(
+                "ddu#ui#winids",
+                currentDduOptions["name"],
+              ),
             );
-            const dduWinIds: number[] = [];
-            for (const name of dduNames) {
-              const winIds = ensureArray<number>(
-                await args.denops.call("ddu#ui#winids", name),
-              );
-              dduWinIds.push(...winIds);
-            }
             if (
               args.sourceParams.ignoreBufNames?.includes(bufName) ||
               dduWinIds.includes(winid)
