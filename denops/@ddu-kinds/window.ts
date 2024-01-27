@@ -17,10 +17,10 @@ import type {
   Previewer,
 } from "../deps.ts";
 
-export interface ActionData {
+export type ActionData = {
   tabnr: number;
   winid: number;
-}
+};
 
 type Params = Record<never, never>;
 
