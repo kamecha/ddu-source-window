@@ -102,16 +102,16 @@ export class Source extends BaseSource<Params> {
             );
             if (
               args.sourceParams.ignoreBufNames?.includes(bufName) ||
-              dduWinIds.includes(winid)
+              dduWinIds.includes(wininfo.winid)
             ) {
               continue;
             }
             const regexp = new RegExp("(\s|\t|\n|\v)", "g");
             const text: string = args.sourceParams.format
               .replaceAll(regexp, " ")
-              .replaceAll("%tn", tab.tabnr.toString())
-              .replaceAll("%T", await getTabName(args.denops, tab.tabnr))
-              .replaceAll("%wi", winid.toString())
+              .replaceAll("%tn", wininfo.tabnr.toString())
+              .replaceAll("%T", await getTabName(args.denops, wininfo.tabnr))
+              .replaceAll("%wi", wininfo.winid.toString())
               .replaceAll("%w", bufName);
             items.push({
               word: text,
