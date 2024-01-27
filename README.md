@@ -14,10 +14,6 @@ https://github.com/vim-denops/denops.vim
 
 https://github.com/Shougo/ddu.vim
 
-## tabby.nvim (Optional)
-
-https://github.com/nanozuki/tabby.nvim
-
 # Example
 
 ```
