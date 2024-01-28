@@ -1,5 +1,5 @@
 import { isWindowInfo, WindowInfo } from "../@ddu-sources/window.ts";
-import { ActionFlags, BaseKind, ensure, fn, is } from "../deps.ts";
+import { ActionFlags, BaseKind, ensure, fn, is, maybe } from "../deps.ts";
 import type {
   Actions,
   Context,
@@ -111,9 +111,9 @@ export class Kind extends BaseKind<Params> {
     if (!action) {
       return undefined;
     }
-    const params = ensure(args.actionParams, isPreviewParams);
-    const border = params.border ?? ["┌", "─", "┐", "│", "┘", "─", "└", "│"];
-    const focusBorder = params.focusBorder ??
+    const params = maybe(args.actionParams, isPreviewParams);
+    const border = params?.border ?? ["┌", "─", "┐", "│", "┘", "─", "└", "│"];
+    const focusBorder = params?.focusBorder ??
       ["╔", "═", "╗", "║", "╝", "═", "╚", "║"];
     const contents: string[] = [];
     // previewContextのheight,widthに沿ってcontentsを初期化
