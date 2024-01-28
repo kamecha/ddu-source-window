@@ -26,4 +26,4 @@ export {
   ensureObject,
   ensureString,
 } from "https://deno.land/x/unknownutil@v2.1.0/mod.ts";
-export { assertEquals } from "https://deno.land/std@0.213.0/testing/asserts.ts";
+export { assertEquals } from "https://deno.land/std@0.213.0/assert/mod.ts";
