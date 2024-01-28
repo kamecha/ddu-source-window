@@ -32,11 +32,6 @@ export type WindowInfo = {
   winrow: number;
 };
 
-export type LeafLayout = ["leaf", number];
-export type RowLayout = ["row", WindowLayout[]];
-export type ColLayout = ["col", WindowLayout[]];
-export type WindowLayout = LeafLayout | RowLayout | ColLayout;
-
 // ↓luaでこれを書くとtabの名前が取れる
 /*
 lua << EOF

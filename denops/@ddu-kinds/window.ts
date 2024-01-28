@@ -1,4 +1,4 @@
-import { WindowInfo, WindowLayout } from "../@ddu-sources/window.ts";
+import { WindowInfo } from "../@ddu-sources/window.ts";
 import {
   ActionFlags,
   BaseKind,
@@ -25,6 +25,11 @@ type PreviewParams = {
   border: string[];
   focusBorder: string[];
 };
+
+type LeafLayout = ["leaf", number];
+type RowLayout = ["row", WindowLayout[]];
+type ColLayout = ["col", WindowLayout[]];
+type WindowLayout = LeafLayout | RowLayout | ColLayout;
 
 export class Kind extends BaseKind<Params> {
   actions: Actions<Params> = {
