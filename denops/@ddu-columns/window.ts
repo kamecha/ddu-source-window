@@ -2,12 +2,12 @@ import { ActionData } from "../@ddu-kinds/window.ts";
 import { getTabName } from "../@ddu-sources/window.ts";
 import {
   BaseColumn,
-  ensureNumber,
-  ensureString,
+  ensure,
   fn,
   GetLengthArguments,
   GetTextArguments,
   GetTextResult,
+  is,
 } from "../deps.ts";
 
 export type Params = {
@@ -19,10 +19,11 @@ export class Column extends BaseColumn<Params> {
     const lengths = await Promise.all(
       args.items.map(async (item) => {
         const action = item.action as ActionData;
-        const bufNum = ensureNumber(
+        const bufNum = ensure(
           await fn.winbufnr(args.denops, action.winid),
+          is.Number,
         );
-        const bufName = ensureString(await fn.bufname(args.denops, bufNum));
+        const bufName = ensure(await fn.bufname(args.denops, bufNum), is.String);
         const regexp = new RegExp("(\s|\t|\n|\v)", "g");
         const text: string = args.columnParams.format
           .replaceAll(regexp, " ")
@@ -38,8 +39,8 @@ export class Column extends BaseColumn<Params> {
   }
   async getText(args: GetTextArguments<Params>): Promise<GetTextResult> {
     const action = args.item.action as ActionData;
-    const bufNum = ensureNumber(await fn.winbufnr(args.denops, action.winid));
-    const bufName = ensureString(await fn.bufname(args.denops, bufNum));
+    const bufNum = ensure(await fn.winbufnr(args.denops, action.winid), is.Number);
+    const bufName = ensure(await fn.bufname(args.denops, bufNum), is.String);
     const regexp = new RegExp("(\s|\t|\n|\v)", "g");
     const text: string = args.columnParams.format
       .replaceAll(regexp, " ")

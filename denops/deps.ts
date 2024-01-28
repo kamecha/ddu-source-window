@@ -20,10 +20,6 @@ export type {
   GetTextArguments,
   GetTextResult,
 } from "https://deno.land/x/ddu_vim@v3.10.1/base/column.ts";
-export {
-  ensureArray,
-  ensureNumber,
-  ensureObject,
-  ensureString,
-} from "https://deno.land/x/unknownutil@v2.1.0/mod.ts";
+export { ensure, is } from "https://deno.land/x/unknownutil@v3.14.1/mod.ts";
+export type { Predicate } from "https://deno.land/x/unknownutil@v3.14.1/mod.ts";
 export { assertEquals } from "https://deno.land/std@0.213.0/assert/mod.ts";

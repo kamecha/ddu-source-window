@@ -1,18 +1,11 @@
-import { WindowInfo } from "../@ddu-sources/window.ts";
-import {
-  ActionFlags,
-  BaseKind,
-  ensureArray,
-  ensureNumber,
-  ensureObject,
-  ensureString,
-  fn,
-} from "../deps.ts";
+import { isWindowInfo, WindowInfo } from "../@ddu-sources/window.ts";
+import { ActionFlags, BaseKind, ensure, fn, is } from "../deps.ts";
 import type {
   Actions,
   Context,
   DduItem,
   Denops,
+  Predicate,
   PreviewContext,
   Previewer,
 } from "../deps.ts";
@@ -25,6 +18,11 @@ type PreviewParams = {
   border: string[];
   focusBorder: string[];
 };
+
+const isPreviewParams: Predicate<PreviewParams> = is.ObjectOf({
+  border: is.ArrayOf(is.String),
+  focusBorder: is.ArrayOf(is.String),
+});
 
 type LeafLayout = ["leaf", number];
 type RowLayout = ["row", WindowLayout[]];
@@ -65,8 +63,9 @@ export class Kind extends BaseKind<Params> {
       context: Context;
     }) => {
       let wins = new Array<WindowInfo>();
-      const currentWindowInfos = ensureArray<WindowInfo>(
+      const currentWindowInfos = ensure(
         await fn.getwininfo(args.denops, args.context.winId),
+        is.ArrayOf(isWindowInfo),
       );
       if (currentWindowInfos.length !== 1) {
         return ActionFlags.None;
@@ -112,7 +111,7 @@ export class Kind extends BaseKind<Params> {
     if (!action) {
       return undefined;
     }
-    const params = ensureObject(args.actionParams) as PreviewParams;
+    const params = ensure(args.actionParams, isPreviewParams);
     const border = params.border ?? ["┌", "─", "┐", "│", "┘", "─", "└", "│"];
     const focusBorder = params.focusBorder ??
       ["╔", "═", "╗", "║", "╝", "═", "╚", "║"];
@@ -161,8 +160,11 @@ export class Kind extends BaseKind<Params> {
       focusBorder: string[],
     ) => {
       if (winlayout[0] === "leaf") {
-        const bufnr = ensureNumber(await fn.winbufnr(denops, winlayout[1]));
-        const title = ensureString(await fn.bufname(denops, bufnr));
+        const bufnr = ensure(
+          await fn.winbufnr(denops, winlayout[1]),
+          is.Number,
+        );
+        const title = ensure(await fn.bufname(denops, bufnr), is.String);
         this.leafLayout(
           j,
           i,

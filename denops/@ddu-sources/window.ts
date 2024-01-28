@@ -1,5 +1,5 @@
-import { BaseSource, ensureArray, ensureString, fn } from "../deps.ts";
-import type { DduOptions, Denops, Item } from "../deps.ts";
+import { BaseSource, ensure, fn, is } from "../deps.ts";
+import type { DduOptions, Denops, Item, Predicate } from "../deps.ts";
 import { ActionData } from "../@ddu-kinds/window.ts";
 
 type Params = {
@@ -12,6 +12,12 @@ type TabInfo = {
   variables: Record<string, unknown>;
   windows: number[];
 };
+
+export const isTabInfo: Predicate<TabInfo> = is.ObjectOf({
+  tabnr: is.Number,
+  variables: is.RecordOf(is.Unknown),
+  windows: is.ArrayOf(is.Number),
+});
 
 export type WindowInfo = {
   botline: number;
@@ -32,6 +38,25 @@ export type WindowInfo = {
   winrow: number;
 };
 
+export const isWindowInfo: Predicate<WindowInfo> = is.ObjectOf({
+  botline: is.Number,
+  bufnr: is.Number,
+  height: is.Number,
+  loclist: is.Number,
+  quickfix: is.Number,
+  terminal: is.Number,
+  tabnr: is.Number,
+  topline: is.Number,
+  variables: is.RecordOf(is.Unknown),
+  width: is.Number,
+  winbar: is.Number,
+  wincol: is.Number,
+  textoff: is.Number,
+  winid: is.Number,
+  winnr: is.Number,
+  winrow: is.Number,
+});
+
 // ↓luaでこれを書くとtabの名前が取れる
 /*
 lua << EOF
@@ -48,14 +73,15 @@ export async function getTabName(
     return "";
   }
   try {
-    const tabPages = ensureArray<number>(
+    const tabPages = ensure(
       await denops.call("ddu#source#window#get_tabpages"),
+      is.ArrayOf(is.Number),
     );
     const tabName = await denops.call(
       "ddu#source#window#get_tab_name",
       tabPages[tabnr - 1],
     );
-    return ensureString(tabName);
+    return ensure(tabName, is.String);
   } catch (e) {
     console.error(e);
     return "";
@@ -71,29 +97,32 @@ export class Source extends BaseSource<Params> {
   }): ReadableStream<Item<ActionData>[]> {
     return new ReadableStream({
       async start(controller) {
-        const tabinfo = ensureArray<TabInfo>(await fn.gettabinfo(args.denops));
+        const tabinfo = ensure(await fn.gettabinfo(args.denops), is.ArrayOf(isTabInfo));
         const items: Item<ActionData>[] = [];
         for (const tab of tabinfo) {
           for (const winid of tab.windows) {
-            const wininfos = ensureArray<WindowInfo>(
+            const wininfos = ensure(
               await fn.getwininfo(args.denops, winid),
+              is.ArrayOf(isWindowInfo),
             );
             if (wininfos.length === 0) {
               continue;
             }
             const wininfo = wininfos[0];
-            const bufName = ensureString(
+            const bufName = ensure(
               await fn.bufname(args.denops, wininfo.bufnr),
+              is.String,
             );
             const currentDduOptions =
               (await args.denops.call("ddu#custom#get_current")) as Partial<
                 DduOptions
               >;
-            const dduWinIds: number[] = ensureArray<number>(
+            const dduWinIds: number[] = ensure(
               await args.denops.call(
                 "ddu#ui#winids",
                 currentDduOptions["name"],
               ),
+              is.ArrayOf(is.Number),
             );
             if (
               args.sourceParams.ignoreBufNames?.includes(bufName) ||
