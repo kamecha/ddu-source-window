@@ -1,4 +1,4 @@
-*ddu-column-window.txt*	window source for ddu.vim
+*ddu-column-window.txt*	window column for ddu.vim
 
 Author: kamecha
 License: MIT license
