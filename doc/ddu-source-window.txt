@@ -30,6 +30,11 @@ Optional: If you want to use the tab name format specifier "%T", please install 
 
 https://github.com/nanozuki/tabby.nvim
 
+NOTE: this feature is deprecated.
+Please use |ddu-column-custom| instead.
+
+https://github.com/kamecha/ddu-column-custom
+
 ==============================================================================
 EXAMPLES				*ddu-source-window-examples*
 
@@ -107,6 +112,8 @@ format 		(string)
 		
 		"%tn":tab number
 		"%T":tabby tab name (requires tabby.vim)
+			NOTE: this format specifier is deprecated.
+			Please use |ddu-column-custom| instead.
 		"%wi":windowid (|winid|)
 		"%w":windows related buffer name in each window
 
