@@ -22,7 +22,7 @@ Deno.test("leafLayout", () => {
     "        ",
     "        ",
     "        ",
-  ]
+  ];
   const after: string[] = [
     "  +----+",
     "  |    |",

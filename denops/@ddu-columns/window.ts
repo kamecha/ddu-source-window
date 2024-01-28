@@ -23,7 +23,10 @@ export class Column extends BaseColumn<Params> {
           await fn.winbufnr(args.denops, action.winid),
           is.Number,
         );
-        const bufName = ensure(await fn.bufname(args.denops, bufNum), is.String);
+        const bufName = ensure(
+          await fn.bufname(args.denops, bufNum),
+          is.String,
+        );
         const regexp = new RegExp("(\s|\t|\n|\v)", "g");
         const text: string = args.columnParams.format
           .replaceAll(regexp, " ")
@@ -39,7 +42,10 @@ export class Column extends BaseColumn<Params> {
   }
   async getText(args: GetTextArguments<Params>): Promise<GetTextResult> {
     const action = args.item.action as ActionData;
-    const bufNum = ensure(await fn.winbufnr(args.denops, action.winid), is.Number);
+    const bufNum = ensure(
+      await fn.winbufnr(args.denops, action.winid),
+      is.Number,
+    );
     const bufName = ensure(await fn.bufname(args.denops, bufNum), is.String);
     const regexp = new RegExp("(\s|\t|\n|\v)", "g");
     const text: string = args.columnParams.format

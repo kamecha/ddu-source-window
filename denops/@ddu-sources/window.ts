@@ -97,7 +97,10 @@ export class Source extends BaseSource<Params> {
   }): ReadableStream<Item<ActionData>[]> {
     return new ReadableStream({
       async start(controller) {
-        const tabinfo = ensure(await fn.gettabinfo(args.denops), is.ArrayOf(isTabInfo));
+        const tabinfo = ensure(
+          await fn.gettabinfo(args.denops),
+          is.ArrayOf(isTabInfo),
+        );
         const items: Item<ActionData>[] = [];
         for (const tab of tabinfo) {
           for (const winid of tab.windows) {
