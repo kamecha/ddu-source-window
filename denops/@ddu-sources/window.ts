@@ -105,6 +105,7 @@ export class Source extends BaseSource<Params> {
             const text: string = args.sourceParams.format
               .replaceAll(regexp, " ")
               .replaceAll("%tn", wininfo.tabnr.toString())
+              // deprecated
               .replaceAll("%T", await getTabName(args.denops, wininfo.tabnr))
               .replaceAll("%wi", wininfo.winid.toString())
               .replaceAll("%w", bufName);
