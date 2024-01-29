@@ -1,5 +1,5 @@
 import { ActionData } from "../@ddu-kinds/window.ts";
-import { getTabName } from "../@ddu-sources/window.ts";
+import { checkTabby, getTabName } from "../@ddu-sources/window.ts";
 import {
   BaseColumn,
   ensure,
@@ -28,9 +28,11 @@ export class Column extends BaseColumn<Params> {
           is.String,
         );
         const regexp = new RegExp("(\s|\t|\n|\v)", "g");
+        checkTabby(args.denops, args.columnParams.format);
         const text: string = args.columnParams.format
           .replaceAll(regexp, " ")
           .replaceAll("%tn", action.tabnr.toString())
+          // deprecated
           .replaceAll("%T", await getTabName(args.denops, action.tabnr))
           .replaceAll("%wi", action.winid.toString())
           .replaceAll("%w", bufName);
@@ -51,6 +53,7 @@ export class Column extends BaseColumn<Params> {
     const text: string = args.columnParams.format
       .replaceAll(regexp, " ")
       .replaceAll("%tn", action.tabnr.toString())
+      // deprecated
       .replaceAll("%T", await getTabName(args.denops, action.tabnr))
       .replaceAll("%wi", action.winid.toString())
       .replaceAll("%w", bufName);

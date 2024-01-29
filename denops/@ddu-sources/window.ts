@@ -57,6 +57,15 @@ export const isWindowInfo: Predicate<WindowInfo> = is.ObjectOf({
   winrow: is.Number,
 });
 
+export async function checkTabby(denops: Denops, text: string): Promise<void> {
+  if (text.includes("%T")) {
+    await denops.call(
+      "ddu#util#print_error",
+      "tabby format (%T) is deprecated",
+    );
+  }
+}
+
 // ↓luaでこれを書くとtabの名前が取れる
 /*
 lua << EOF
@@ -134,6 +143,7 @@ export class Source extends BaseSource<Params> {
               continue;
             }
             const regexp = new RegExp("(\s|\t|\n|\v)", "g");
+            checkTabby(args.denops, args.sourceParams.format);
             const text: string = args.sourceParams.format
               .replaceAll(regexp, " ")
               .replaceAll("%tn", wininfo.tabnr.toString())
