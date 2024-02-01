@@ -26,7 +26,7 @@ export class Column extends BaseColumn<Params> {
         const bufName = ensure(
           await fn.bufname(args.denops, bufNum),
           is.String,
-        );
+        ) || "[No Name]";
         const regexp = new RegExp("(\s|\t|\n|\v)", "g");
         checkTabby(args.denops, args.columnParams.format);
         const text: string = args.columnParams.format
@@ -48,7 +48,8 @@ export class Column extends BaseColumn<Params> {
       await fn.winbufnr(args.denops, action.winid),
       is.Number,
     );
-    const bufName = ensure(await fn.bufname(args.denops, bufNum), is.String);
+    const bufName = ensure(await fn.bufname(args.denops, bufNum), is.String) ||
+      "[No Name]";
     const regexp = new RegExp("(\s|\t|\n|\v)", "g");
     const text: string = args.columnParams.format
       .replaceAll(regexp, " ")

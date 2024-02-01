@@ -124,7 +124,7 @@ export class Source extends BaseSource<Params> {
             const bufName = ensure(
               await fn.bufname(args.denops, wininfo.bufnr),
               is.String,
-            );
+            ) || "[No Name]";
             const currentDduOptions =
               (await args.denops.call("ddu#custom#get_current")) as Partial<
                 DduOptions
