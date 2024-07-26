@@ -99,7 +99,7 @@ export class Source extends BaseSource<Params> {
             if (
               args.sourceParams.ignoreBufNames !== undefined &&
               // ユーザーが設定している場合は警告を出す
-              args.sourceParams.ignoreBufNames.toString() ===
+              args.sourceParams.ignoreBufNames.toString() !==
                 ["ddu-ff-filter-default", "ddu-ff-default"].toString()
             ) {
               await args.denops.call(
