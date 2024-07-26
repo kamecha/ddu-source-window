@@ -97,9 +97,20 @@ export class Source extends BaseSource<Params> {
               is.ArrayOf(is.Number),
             );
             if (
-              args.sourceParams.ignoreBufNames?.includes(bufName) ||
-              dduWinIds.includes(wininfo.winid)
+              args.sourceParams.ignoreBufNames !== undefined &&
+              // ユーザーが設定している場合は警告を出す
+              args.sourceParams.ignoreBufNames.toString() ===
+                ["ddu-ff-filter-default", "ddu-ff-default"].toString()
             ) {
+              await args.denops.call(
+                "ddu#util#print_error",
+                "ignoreBufNames is deprecated",
+              );
+              if (args.sourceParams.ignoreBufNames.includes(bufName)) {
+                continue;
+              }
+            }
+            if (dduWinIds.includes(wininfo.winid)) {
               continue;
             }
             const regexp = new RegExp("(\s|\t|\n|\v)", "g");
