@@ -57,46 +57,6 @@ export const isWindowInfo: Predicate<WindowInfo> = is.ObjectOf({
   winrow: is.Number,
 });
 
-export async function checkTabby(denops: Denops, text: string): Promise<void> {
-  if (text.includes("%T")) {
-    await denops.call(
-      "ddu#util#print_error",
-      "tabby format (%T) is deprecated",
-    );
-  }
-}
-
-// ↓luaでこれを書くとtabの名前が取れる
-/*
-lua << EOF
-local tab = require('tabby.tab')
-print(tab.get_name(1))
-EOF
-*/
-export async function getTabName(
-  denops: Denops,
-  tabnr: number,
-): Promise<string> {
-  // tabbyが認識できるかどうかチェック
-  if (!(await denops.call("ddu#source#window#lua_check", "tabby"))) {
-    return "";
-  }
-  try {
-    const tabPages = ensure(
-      await denops.call("ddu#source#window#get_tabpages"),
-      is.ArrayOf(is.Number),
-    );
-    const tabName = await denops.call(
-      "ddu#source#window#get_tab_name",
-      tabPages[tabnr - 1],
-    );
-    return ensure(tabName, is.String);
-  } catch (e) {
-    console.error(e);
-    return "";
-  }
-}
-
 export class Source extends BaseSource<Params> {
   kind = "window";
 
@@ -143,12 +103,9 @@ export class Source extends BaseSource<Params> {
               continue;
             }
             const regexp = new RegExp("(\s|\t|\n|\v)", "g");
-            checkTabby(args.denops, args.sourceParams.format);
             const text: string = args.sourceParams.format
               .replaceAll(regexp, " ")
               .replaceAll("%tn", wininfo.tabnr.toString())
-              // deprecated
-              .replaceAll("%T", await getTabName(args.denops, wininfo.tabnr))
               .replaceAll("%wi", wininfo.winid.toString())
               .replaceAll("%w", bufName);
             items.push({
